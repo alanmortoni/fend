@@ -7,7 +7,7 @@ let baseURL = "http://api.openweathermap.org/data/2.5/weather?zip=";
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log('DOM fully loaded and parsed');
     document.getElementById("generate").addEventListener("click", performAction);
-    updateUI('/all')
+    updateOne('/first');
 });
 
 
@@ -23,7 +23,7 @@ function performAction(event) {
       date: date_str,
       userResponse: userResponse
     });
-    updateUI("/all");
+    updateOne("/last");
   });
 }
 
@@ -59,13 +59,25 @@ const postData = async (url = "", data = {}) => {
 
 /* Function to GET Project Data */
 const updateUI = async (url = "") => {
-  const request = await fetch(url);
+  const req = await fetch(url);
   try {
-    const allData = await request.json();
+    const allData = await req.json();
     lastdata = allData.pop();
     document.getElementById("date").innerHTML = lastdata.date;
     document.getElementById("temp").innerHTML = lastdata.temperature;
     document.getElementById("content").innerHTML = lastdata.userResponse;
+  } catch (error) {
+    console.log("error", error);
+  }
+};
+
+const updateOne = async (url='') => {
+  const req = await fetch(url);
+  try{
+    const data = await req.json();
+    document.getElementById("date").innerHTML = data.date;
+    document.getElementById("temp").innerHTML = data.temperature;
+    document.getElementById("content").innerHTML = data.userResponse;
   } catch (error) {
     console.log("error", error);
   }

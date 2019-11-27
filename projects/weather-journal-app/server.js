@@ -33,22 +33,25 @@ app.get('/all', function (req, res) {
     res.send(projectData);
 });
 
+app.get('/last',function(req,res){
+    if(projectData.length){
+        res.send(projectData[projectData.length-1]);
+    }
+    else res.sendStatus(404);
+});
+
+app.get('/first',function(req,res){
+    if(projectData.length){
+        res.send(projectData[0]);
+    }
+    else res.sendStatus(404);
+});
+
 // Post route
 app.post('/addData', function (req, res) {
     projectData.push(req.body);
-    res.send('Success!');
+    res.send();
 })
-
-// Alternative POST route
-/* app.post('/add', function (req, res) {
-    newEntry = {
-        temperature: request.body.temperature,
-        date: request.body.date,
-        userResponse: request.body.userResponse
-    };
-
-    projectData.unshift(newEntry);
-}); */
 
 
   
