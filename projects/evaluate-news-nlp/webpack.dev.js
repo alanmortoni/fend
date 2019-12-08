@@ -22,10 +22,7 @@ module.exports = {
         ]
     },
     plugins: [
-        new HtmlWebPackPlugin({
-            template: "./src/client/views/index.html",
-            filename: "./index.html",
-        }),
+        new HtmlWebPackPlugin(),
         new CleanWebpackPlugin({
             // Simulate the removal of files
             dry: true,

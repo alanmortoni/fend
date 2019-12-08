@@ -1,7 +1,13 @@
+const express = require('express');
 var aylien = require("aylien_textapi");
+const bodyParser = require('body-parser');
+const cors = require('cors');
 const dotenv = require("dotenv");
+
 dotenv.config();
 console.log(`Your API key is ${process.env.API_KEY}`);
+
+
 // set aylien API credentias //
 var textapi = new aylien({
   application_id: process.env.API_ID,
@@ -17,11 +23,11 @@ textapi.sentiment({
 });
 
 var path = require("path");
-const express = require("express");
+
 const mockAPIResponse = require("./mockAPI.js");
 
 const app = express();
-
+app.use(bodyParser.json())
 app.use(express.static("dist"));
 
 console.log(__dirname);
@@ -31,14 +37,15 @@ app.get("/", function(req, res) {
 });
 
 app.get("/api", (req, res) => {
-  textapi.sentiment({ 'text': "xyxyxy" }, (error, response) => {
+  textapi.sentiment({ 'text': "I like potatoes" }, (error, response) => {
     res.send(response);
   });
 });
 
 app.post("/api",(req,res)=>{
-  textapi.sentiment(req.body,(error,response)=>{
-    res.send(response);
+  textapi.sentiment(req.body.text,(error,response)=>{
+    console.log(response);
+    res.send(JSON.stringify(response));
   })
 });
 
@@ -50,3 +57,18 @@ app.listen(8080, function() {
 app.get("/test", function(req, res) {
   res.send(mockAPIResponse);
 });
+
+app.post('/sentiment', (req, res, next) => {
+  if(req.body.text !== " ") {
+    const text = req.body.text;
+    textapi.sentiment({
+      'text': text
+    }, function (error, response) {
+      if (error === null) {
+        res.status(201).send(response);
+      }
+    });
+  } else {
+    res.status(400).json('Bad Request');
+  }
+})
