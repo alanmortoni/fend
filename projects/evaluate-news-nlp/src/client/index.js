@@ -1,8 +1,5 @@
 import { pseudoRandomBytes } from "crypto";
-
-//import { checkForName } from './js/nameChecker'
-//import { handleSubmit } from './js/formHandler'
-//import { buildPage } from './js/pageBuilder.js'
+import { buildPage } from './js/pageBuilder.js'
 
 //import './styles/resets.scss'
 //import './styles/base.scss'

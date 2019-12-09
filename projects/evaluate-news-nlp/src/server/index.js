@@ -13,6 +13,8 @@ var textapi = new aylien({
   application_key: process.env.API_KEY
 });
 
+app.use(bodyParser.urlencoded({ extended: false }))
+
 textapi.sentiment({
   'text': 'John is a very good football player!'
 }, function(error, response) {
@@ -22,7 +24,6 @@ textapi.sentiment({
 });
 
 var path = require("path");
-const express = require("express");
 const mockAPIResponse = require("./mockAPI.js");
 
 const app = express();
