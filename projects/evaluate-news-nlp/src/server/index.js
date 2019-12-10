@@ -1,4 +1,3 @@
-const express = require('express');
 var aylien = require("aylien_textapi");
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -13,7 +12,6 @@ var textapi = new aylien({
   application_key: process.env.API_KEY
 });
 
-app.use(bodyParser.urlencoded({ extended: false }))
 
 textapi.sentiment({
   'text': 'John is a very good football player!'
@@ -23,6 +21,7 @@ textapi.sentiment({
   } else console.log("xyxyzzz")
 });
 
+const express = require('express');
 var path = require("path");
 const mockAPIResponse = require("./mockAPI.js");
 
