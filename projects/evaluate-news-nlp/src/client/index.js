@@ -21,33 +21,18 @@ function buildForm() {
   result.innerHTML = "Result goes here";
   button.innerText = "Submit";
   button.addEventListener("click", async e => {
-    result.innerHTML = await request(input.value);
+    result.innerHTML = await getResult(input.value);
   });
   return element;
 }
 
 async function getResult(text) {
   return await fetch("/sentiment", {
-    method: "post",
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ text: text })
   }).then(res => res.text());
 }
-
-async function request(text) {
-    try {
-      const response = await fetch('http://localhost:8080/sentiment',
-        {
-          method: 'POST',
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ text: text })
-        });
-      if (response.ok) {
-        return await response.text();
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
 
 document.body.appendChild(buildForm());
 

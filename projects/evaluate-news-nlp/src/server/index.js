@@ -1,6 +1,6 @@
 var aylien = require("aylien_textapi");
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const bodyParser = require("body-parser");
+const cors = require("cors");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -12,39 +12,18 @@ var textapi = new aylien({
   application_key: process.env.API_KEY
 });
 
-
-textapi.sentiment({
-  'text': 'John is a very good football player!'
-}, function(error, response) {
-  if (error === null) {
-    console.log(response);
-  } else console.log("xyxyzzz")
-});
-
-const express = require('express');
+const express = require("express");
 var path = require("path");
 const mockAPIResponse = require("./mockAPI.js");
 
 const app = express();
-
+app.use(bodyParser.json());
 app.use(express.static("dist"));
 
 console.log(__dirname);
 
 app.get("/", function(req, res) {
   res.sendFile("dist/index.html");
-});
-
-app.get("/api", (req, res) => {
-  textapi.sentiment({ 'text': "xyxyxy" }, (error, response) => {
-    res.send(response);
-  });
-});
-
-app.post("/api",(req,res)=>{
-  textapi.sentiment(req.body,(error,response)=>{
-    res.send(response);
-  })
 });
 
 // designates what port the app will listen to for incoming requests
@@ -54,4 +33,10 @@ app.listen(8080, function() {
 
 app.get("/test", function(req, res) {
   res.send(mockAPIResponse);
+});
+
+app.post("/sentiment", (req, res) => {
+  textapi.sentiment({ text: req.body.text}, (error, response) => {
+    res.send(response);
+  });
 });
