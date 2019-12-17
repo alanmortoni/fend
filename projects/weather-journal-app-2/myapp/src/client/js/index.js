@@ -4,11 +4,8 @@ const app = express();
 
 import {getGeoLocation} from './request';
 
-const geoLocation = await getGeoLocation(trip.city);
-
-trip.latitude = geoLocation.latitude;
-trip.longitude = geoLocation.longitude;
-trip.countryCode = geoLocation.countryCode;
+const [lat,lng,cc] = getGeoLocation('london');
+console.log([lat,lng,cc]);
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -19,9 +16,6 @@ app.listen(8000, () => {
 });
 
 console.log('Entry point is setup');
-
-import './styles/resets.scss'
-import './styles/style.scss'
 
 
 function startTimer(duration, display) {

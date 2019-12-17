@@ -18,10 +18,6 @@ module.exports = {
   			loader: 'babel-loader'
   		}
     ],
-    output: {
-      libraryTarget: 'var',
-      library: 'Client'
-  },
   },
   plugins: [
     new HTMLWebPackPlugin({
