@@ -1,72 +1,55 @@
 function buildForm() {
-  var element = document.createElement("div");
+  const br = function(){return document.createElement("br");};
+  var inputDiv = document.createElement("div");
+    inputDiv.classList.add("inputDiv")
   var placeinput = document.createElement("input");
+    placeinput.classList.add("placeinput");
+    placeinput.value = "London";
   var fromdateinput = document.createElement("input");
-  fromdateinput.setAttribute("type","date");
-  fromdateinput.value = new Date().toISOString().slice(0,10);
+    fromdateinput.setAttribute("type","date");
+    fromdateinput.value = new Date().toISOString().slice(0,10);
+    fromdateinput.classList.add("dateinput");
   var todateinput = document.createElement("input");
-  todateinput.setAttribute("type","date");
-  todateinput.value = new Date().toISOString().slice(0,10);
+    todateinput.setAttribute("type","date");
+    todateinput.value = new Date().toISOString().slice(0,10);
+    fromdateinput.classList.add("dateinput");
   var button = document.createElement("button");
-  var result = document.createElement("div");
-  element.append(placeinput,fromdateinput,todateinput,button,result);
-  placeinput.value = "London";
-  result.innerHTML = "Result goes here";
-  button.innerText = "Submit";
+    button.innerText = "Submit";
+  inputDiv.append(placeinput,br(),fromdateinput,br(),todateinput,br(),button);
+  
+  var resultDiv = document.createElement("div");
+    resultDiv.classList.add("resultDiv");
+  var picture = document.createElement("img");
+    picture.classList.add("picture");
+  var countdown = document.createElement("div");
+    countdown.classList.add("countdown");
+  var weather = document.createElement("div");
+    weather.classList.add("weather");
+  resultDiv.append(picture,br(),weather,br(),countdown);
+  
   button.addEventListener("click", async e => {
-    result.innerHTML = await getJunk(placeinput.value,fromdateinput.value,todateinput.value);
+      var days;
+      [days,picture.src,countdown.innerText] = await getResults(placeinput.value,fromdateinput.value,todateinput.value);
+      weather.innerHTML = "";
+      days.forEach(s=>{
+        day = document.createElement('p');
+        day.innerText=s;
+        day.classList.add("day")
+        weather.appendChild(day);
+        });
   });
-  return element;
+  return [inputDiv,resultDiv];
 }
 
-
-async function getJunk(place,from,to){
-    const {"lat":lat,"lng":lng,"countryCode":cc} =  await getGeoLocation(place);
-    console.log(JSON.stringify([lat,lng,cc]));
-    const tsf = new Date(from).getTime()/1000;
-    //console.log(JSON.stringify(await getWeather(lat,lng,tsf)));
-    const tst = new Date(to).getTime()/1000;
-    const tsA = Array(1+(tst-tsf)/(24*60*60)).fill(tsf).map((x,i)=>x+24*60*60*i);
-    console.log(tsA);
-    const pA = tsA.map(async ts=>getWeather(lat,lng,ts).then(w=>{
-        const r = w['daily']['data'][0]['icon'];
-        console.log(r);
-        return r;
-        }));
-    const ret = await Promise.all(pA);
-    return JSON.stringify(ret);
-}
-
-async function getGeoLocation(location, username = "fritscka") {
-  try {
-    const url =
-      `http://api.geonames.org/searchJSON?q=${location}&maxRows=1&username=${username}`;
-    return fetch(url)
-      .then(res => {
-        return res.json();
-      })
-      .then(json => {
-        return (({lat,lng,countryCode})=>({lat,lng,countryCode}))(json["geonames"][0]);//[("lat", "lng", "countryCode")];
-      });
-  } catch (error) {
-    console.log(error);
-  }
-}
-
-async function getWeather(lat,lng,time){
+async function getResults(place,from,to){
     try{
-        const url = `http://localhost:8000/weather/${lat},${lng},${time}`;
-        return fetch(url)
-            .then(res => {
-                return res.json()
-            })
-            .then(json => {
-                console.log(json);
-                return json;
-            })
+        const url = new URL("/api",document.location.origin);
+        const params = {place:place,from:from,to:to};
+        Object.entries(params).forEach(([k,v],i)=>url.searchParams.append(k,v));
+        return await fetch(url.href).then(r=>r.json());
     } catch (error){
         console.log(error);
     }
 }
 
-document.body.appendChild(buildForm());
+document.body.append(...buildForm());

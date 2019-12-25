@@ -1,15 +1,11 @@
-const express = require("express");
+const express = require("express");const app = express();
 const bodyParser = require("body-parser");
-const cors = require("cors");
+const cors = require("cors");app.use(cors());
 const fetch = require("node-fetch");
+const api = require("../api/api");
+const dotenv = require("dotenv");dotenv.config();
 
-const app = express();
-app.use(cors());
-
-const dotenv = require("dotenv");
-dotenv.config();
-
-console.log(`Your API key is ${process.env.API_KEY}`);
+console.log(`Your API key is ${process.env.DS_KEY}`);
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -17,23 +13,24 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(express.static("./src/client"));
+app.use(express.static("./src/client/"));
 
 app.get("/", (req, res, next) => {
   res.sendfile("./src/client/index.html");
 });
 
-app.get("/weather/:latlng", (req, res, next) => {
+app.get("/api", (req, res, next) => {
   try {
-    const url = `https://api.darksky.net/forecast/${process.env.API_KEY}/${req.params.latlng}`;
-    console.log(url);
-    fetch(url)
-      .then(async res => {
-        return res.json();
-      })
-      .then(async json => {
-        res.send(JSON.stringify(json));
-      });
+    api
+      .getResults(
+        req.query.place,
+        req.query.from,
+        req.query.to,
+        process.env.DS_KEY,
+        process.env.PB_KEY,
+        process.env.GN_USER
+      )
+      .then(r => res.send(JSON.stringify(r)));
   } catch (error) {
     console.log(error);
   }
