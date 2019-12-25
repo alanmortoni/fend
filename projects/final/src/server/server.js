@@ -13,10 +13,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(express.static("./src/client/"));
+app.use(express.static("./dist/"));
 
 app.get("/", (req, res, next) => {
-  res.sendfile("./src/client/index.html");
+  res.sendfile("./dist/index.html");
 });
 
 app.get("/api", (req, res, next) => {

@@ -1,3 +1,5 @@
+import './styles.scss';
+
 function buildForm() {
   const br = function(){return document.createElement("br");};
   var inputDiv = document.createElement("div");
@@ -32,7 +34,7 @@ function buildForm() {
       [days,picture.src,countdown.innerText] = await getResults(placeinput.value,fromdateinput.value,todateinput.value);
       weather.innerHTML = "";
       days.forEach(s=>{
-        day = document.createElement('p');
+        const day = document.createElement('p');
         day.innerText=s;
         day.classList.add("day")
         weather.appendChild(day);
