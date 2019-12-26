@@ -1,0 +1,31 @@
+div {
+    font-size: 1.2em;
+    color: red;
+}
+
+input{
+    font-size: 1.2em;
+    background-color:aliceblue;
+}
+
+button{
+    font-size: 1.2em;
+    color: coral;
+    background-color: blue;
+}
+button:hover{
+    background-color: cornflowerblue;
+}
+
+.countdown{
+    font-size: 3.0em;
+    color: cornflowerblue;
+}
+
+.inputDiv{
+    outline:5px dotted green;
+}
+
+.day{
+    background-color: pink;
+}
