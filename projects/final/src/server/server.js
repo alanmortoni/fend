@@ -2,7 +2,7 @@ const express = require("express");const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");app.use(cors());
 const fetch = require("node-fetch");
-const api = require("../api/api");
+const api = require("./api");
 const dotenv = require("dotenv");dotenv.config();
 
 console.log(`Your API key is ${process.env.DS_KEY}`);

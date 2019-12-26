@@ -1,4 +1,4 @@
-import './styles.scss';
+import './styles folder/styles.scss';
 
 function buildForm() {
   const br = function(){return document.createElement("br");};
